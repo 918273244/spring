@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
+	
+	<!-- 创建如下bean等于完成了：HelloWorld helloWorld = new HelloWorld(); -->
+	<bean id="helloWorld" class="com.cmcc.spring.domain.HelloWorld"/>
+	
+	<bean id="userDao" class="com.cmcc.spring.dao.UserDao"/>
+
+	<!-- bean的注入方法一：通过getter、setter方法注入。最常用 -->
+	<!-- 还可以添加 autowire="byName"属性，表示会根据name来完成注入。一般不建议使用autowire属性 -->
+	<bean id="userService" class="com.cmcc.spring.service.UserService">
+		<property name="userDao" ref="userDao"/>
+		<property name="id" value="10"/>	<!-- 演示值的注入，用value -->
+		<property name="names">		<!-- 演示List类属性的注入 -->
+			<list>
+				<value>aaa</value>
+				<value>bbb</value>
+				<value>ccc</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- bean的注入方法二：通过构造方法注入。这就需要bean对应的类中有相应的构造方法，且bean中应该修改为constructor-arg属性 -->
+	<!-- <bean id="userService" class="com.cmcc.spring.service.UserService">
+		<constructor-arg ref="userDao"/>
+	</bean> -->
+	
+
+	<bean id="userAction" class="com.cmcc.spring.action.UserAction">
+		<!-- name中的值会子啊userService对象中调用settter -->
+		<property name="userService" ref="userService"/>
+	</bean>
+	
+</beans>

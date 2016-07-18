@@ -1,0 +1,42 @@
+动态代理
+
+1. 只学一个方法
+	* 定义：方法的作用：在运行时，动态创建一组指定的接口的实现类对象。(在运行时，创建实现了指定的一组接口的对象)
+	* 例：
+		interface A {}
+		interface B {}
+		Object obj = 方法(new Class[]{A.class, B.class});	//obj实现了A和B两个接口
+
+2. 动态代理的作用
+	* 最终是为了学习AOP(面向切面编程)，它与装饰者模式有点类似，它比装饰者模式还要灵活。
+	
+3. Object prosyObject = Proxy.newProxyInstance(ClassLoader classLoader, Class[] interfaces, InvocationHandler h);
+	* 方法作用：动态创建实现了interfaces数组中所有指定接口的实现类对象
+	* 参数：
+		> ClassLoader：类加载器(类似于将人由阳间带到阴间的马头人)
+		> Class[] interfaces：指定要实现的接口们
+		> InvocationHandler：代理对象的所有方法(个别不调用，如getClass()方法)都会调用InvocationHandler的invoke()方法
+	
+4. InvocationHandler
+	* 该类中的主要方法：public Object invoke(Object proxy, Method method, Obejct[] args);
+	* 参数：
+		> Object proxy：当前对象，即要创建的代理对象
+		> Method method：当前被调用的方法(目标方法)
+		> Object[] args：实参
+	* 这个invoke()方法是在调用代理对象所实现的接口中的方法时才会被调用
+	
+5. 动态代理的几个关键词
+	* 目标对象
+	* 目标方法
+	* 代理对象(用来代理上面的目标对象，从而实现对目标对象中的目标方法进行增强)
+	
+6. 我们现在已经学过的对方法进行增强的手段
+	* 继承
+		> 被增强的对象不能变
+		> 增强内容不能变
+	* 装饰者模式
+		> 被增强的对象可以变
+		> 增强内容不能变
+	* 动态代理
+		> 被增强的对象可以变
+		> 增强内容可以变

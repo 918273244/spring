@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
+  <display-name>day21_kick</display-name>
+
+	<listener>
+		<listener-class>com.cmcc.web.listener.UserListener</listener-class>
+	</listener>
+
+	<servlet>
+		<servlet-name>kickServlet</servlet-name>
+		<servlet-class>com.cmcc.web.servlet.KickServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>kickServlet</servlet-name>
+		<url-pattern>/KickServlet</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>listUserServlet</servlet-name>
+		<servlet-class>com.cmcc.web.servlet.ListUserServlet</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>loginServlet</servlet-name>
+		<servlet-class>com.cmcc.web.servlet.LoginServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>loginServlet</servlet-name>
+		<url-pattern>/LoginServlet</url-pattern>
+	</servlet-mapping>
+
+</web-app>

@@ -1,0 +1,9 @@
+1、根据session数目大致估算当前用户数目
+
+2、将count数目通过ServletContext返回给前端
+
+3、前端从applicationScope中获取
+
+4、这只是大致获取在线人数，因为会受到一下两个方面影响：
+	1)一个人打开多个浏览器。那么多个浏览器会产生多个session
+	2)客户离开后，session默认是30分钟后才注销

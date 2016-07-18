@@ -1,0 +1,66 @@
+1 监听器
+	1.1 它是一个接口，内容由我们来实现
+	1.2 它需要注册。例如注册在按钮上
+	1.3 监听器中的方法，会在特殊事件发声时被调用
+	
+2 观察者：
+	2.1 事件源：如小偷
+	2.2 事件：如偷东西
+	2.3 监听器：如警察
+	2.4 监听器中的方法：如抓捕
+	
+3 javaweb中的监听器(总共有8个监听器)
+	3.1 事件源：三大域，即ServletContext、HttpSession、ServletRequest
+		3.1.1 ServletContext：
+			3.1.1.1 生命周期监听：ServletContextListener。它有两个方法，一个在出生是调用，一个在销毁时调用
+				1)void contextInitialized(ServletContextEvent event)：创建ServletContext时
+				2)void contextDestroyed(ServletContextEvent event)：销毁ServletContext时
+			3.1.1.2 属性监听：ServletContextAttributeListener。它有三个方法，一个在添加属性时调用，一个在替换属性时调用，最后一个是在移除属性时调用
+				1)void attributeAdded(ServletContextAttributeEvent event)；添加属性时
+				2)void attributeReplaced(ServletContextAttributeEvent event)：修改属性
+				3)void attributeRemoved(ServletContextAttributeEvent event)：删除属性时
+				
+		3.1.2 HttpSession：
+			3.1.2.1 生命周期监听：HttpSessionListener。它有两个方法，一个在出生是调用，一个在销毁时调用
+				1)void sessionCreated(HttpSessionEvent event)：创建session时
+				2)void sessionDestroyed(HttpSessionEvent event)：销毁session时
+			3.1.2.2 属性监听：HttpSessionAttributeListener。它有三个方法，一个在添加属性时调用，一个在替换属性时调用，最后一个是在移除属性时调用
+				1)void attributeAdded(HttpSessionBindingEvent event)；添加属性时
+				2)void attributeReplaced(HttpSessionBindingEvent event)：修改属性
+				3)void attributeRemoved(HttpSessionBindingEvent event)：删除属性时
+				
+		3.1.3 ServletRequest：
+			3.1.3.1 生命周期监听：ServletRequestListener。它有两个方法，一个在出生是调用，一个在销毁时调用
+				1)void requestInitialized(ServletRequestEvent event)：创建request
+				2)void requestDestroyed(ServletRequestEvent event)：销毁request
+			3.1.2.2 属性监听：ServletRequestAttributeListener。它有三个方法，一个在添加属性时调用，一个在替换属性时调用，最后一个是在移除属性时调用
+				1)void attributeAdded(ServletRequestAttributeEvent event)；添加属性时
+				2)void attributeReplaced(ServletRequestAttributeEvent event)：修改属性
+				3)void attributeRemoved(ServletRequestAttributeEvent event)：删除属性时
+	
+	3.2 感知监听器(都与HttpSession相关，即HttpSessionBindingListener和HttpSessionActivationListener两个监听器)
+		3.2.1 它用来添加到javaBean上，而不是添加到三大域上
+		3.2.2 这两个监听器都不需要在web.xml中注册
+			 
+4 javaweb中监听器的编写
+	4.1 写一个监听器类：要求必须要去实现某个监听器接口
+	4.2 注册，是在web.xml中配置来完成注册
+	
+5 事件对象
+	5.1 ServletContextEvent：其有一个方法：ServletContext getServletContext()
+	5.2 HttpSessionEvent：其有一个方法：HttpSession getSession()
+	5.3 ServletRequestEvent：其有两个方法：
+		5.3.1 ServletContext getServletContext()
+		5.3.2 ServletRequest getServletRequest()
+	5.4 ServletContextAttributeEvent：它是ServletContextEvent的子类，它有3个方法
+		1)ServletConetxt getServletContext()
+		2)String getName()：获取属性名
+		3)String getValue()：获取属性值
+	5.5 HttpSessionBindingEvent：它是HttpSessionEvent的子类，它有3个方法
+		1)HttpSession getHttpSession()
+		2)String getName()：获取属性名
+		3)String getValue()：获取属性值
+	5.6 ServletRequestAttributeEvent：它是ServletRequestEvent的子类，它有3个方法
+		1)ServletRequest getServletRequest()
+		2)String getName()：获取属性名
+		3)String getValue()：获取属性值

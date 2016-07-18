@@ -1,0 +1,119 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd 
+		http://www.springframework.org/schema/mvc 
+		http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd 
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-3.2.xsd 
+		http://www.springframework.org/schema/aop 
+		http://www.springframework.org/schema/aop/spring-aop-3.2.xsd 
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx-3.2.xsd ">
+
+	<!-- web.xml中shiro的filter对应的bean -->
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<property name="securityManager" ref="securityManager" />
+		<!-- loginUrl认证提交地址，如果没有认证将会请求此地址进行认证，请求此地址将由formAuthenticationFilter进行表单认证 -->
+		<property name="loginUrl" value="/login.action" />
+		<!-- unauthorizedUrl表示没有权限操作时的跳转页面 -->
+		<property name="unauthorizedUrl" value="/refuse.jsp" />
+		<!-- 自定义表单认证类FormAuthenticationFilter，用于在认证之前进行验证码校验 -->
+		<property name="filters">
+			<map>
+				<!-- FormAuthenticationFilter是基于表单认证的过虑器 -->
+				<entry key="authc" value-ref="formAuthenticationFilter" />
+			</map>
+		</property>
+
+		<!-- 过虑器链定义.是从上向下顺序执行，一般将/**放在最下边 -->
+		<property name="filterChainDefinitions">
+			<value>
+				<!-- 静态资源设置匿名访问 -->
+				/images/** = anon
+				/js/** = anon
+				/styles/** = anon
+				<!-- 验证码资源设置为匿名访问 -->
+				/validatecode.jsp = anon
+
+				<!-- /logout.action = anon: 表示请求/logout.action地址，shiro清除session -->
+				/logout.action = anon
+
+				<!-- 配置cookie，即记住我 -->
+				/index.jsp = user
+				/first.action = user
+				/welcome.jsp = user
+
+				<!-- 商品查询需要商品查询权限。使用注解方式来代替下面的方式。注意：注解授权一般添加到controller和jsp页面中 -->
+				<!-- /items/queryItems.action = perms[item:query] -->
+
+				<!-- "/** = authc"：表示所有的url都需要认证才可以访问 -->
+				/** = authc
+			</value>
+		</property>
+	</bean>
+
+	<!-- 基于Form表单的身份验证过滤器，不配置将也会注册此过虑器，表单中的用户账号、密码及loginurl将采用默认值，建议配置 -->
+	<bean id="formAuthenticationFilter" class="cn.itcast.ssm.controller.MyFormAuthenticationFilter ">
+		<!-- 表单中账号的input名称 -->
+		<property name="usernameParam" value="username" />
+		<!-- 表单中密码的input名称 -->
+		<property name="passwordParam" value="password" />
+	</bean>
+
+
+	<!-- securityManager安全管理器 -->
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<!-- securityManager管理自定义realm -->
+		<property name="realm" ref="myRealm" />
+		<!-- securityManager管理缓存管理器 -->
+		<property name="cacheManager" ref="cacheManager" />
+		<!-- securityManager管理session。和shiro整合后，就可以使用shiro的session管理来代替Servlet管理session -->
+		<property name="sessionManager" ref="sessionManager" />
+		<!-- securityManager管理rememberMe，即"记住我"功能 -->
+		<property name="rememberMeManager" ref="rememberMeManager"/>
+	</bean>
+
+	<!-- realm -->
+	<bean id="myRealm" class="cn.itcast.ssm.shiro.MyRealm">
+		<!-- 将凭证匹配器设置到自定义realm中，realm按照凭证匹配器的设置进行散列 -->
+		<property name="credentialsMatcher" ref="credentialsMatcher" />
+	</bean>
+
+	<!-- 缓存管理器 -->
+	<bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+		<property name="cacheManagerConfigFile" value="classpath:shiro-ehcache.xml" />
+	</bean>
+
+	<!-- 会话管理器 -->
+	<bean id="sessionManager"
+		class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+		<!-- session的失效时长，单位毫秒 -->
+		<property name="globalSessionTimeout" value="600000" />
+		<!-- 删除失效的session -->
+		<property name="deleteInvalidSessions" value="true" />
+	</bean>
+
+	<!-- rememberMeManager管理器 -->
+	<bean id="rememberMeManager" class="org.apache.shiro.web.mgt.CookieRememberMeManager">
+		<property name="cookie" ref="rememberMeCookie" />
+	</bean>
+	<!-- 记住我cookie -->
+	<bean id="rememberMeCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+		<!-- cookie的名字自定义为rememberMe -->
+		<constructor-arg value="rememberMe" />
+		<!-- 记住我cookie生效时间30天 -->
+		<property name="maxAge" value="1000000" />
+	</bean>
+
+
+	<!-- 凭证匹配器。因为使用md5加密，因此需要设置md5加密的一些参数 -->
+	<bean id="credentialsMatcher"
+		class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+		<property name="hashAlgorithmName" value="md5" />
+		<property name="hashIterations" value="2" />
+	</bean>
+
+</beans>

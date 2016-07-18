@@ -1,0 +1,8 @@
+Servlet3.0中注解代替配置文件
+
+1. 删除web.xml。不需要了，因为已经不需要配置文件了
+
+2. 在Servlet类上添加@WebServlet(urlPatterns={"AServlet"})
+	总结：
+		* 注解好处：配置信息少
+		* 注解缺点：不方便修改

@@ -1,0 +1,17 @@
+异步处理：
+
+1. 什么是异步处理
+	原来，在服务器没有结束相应之前，浏览器是看不到响应内容的，只有响应结束时，浏览器才能显示结果。
+	现在，异步处理的作用：在服务器开始响应后，浏览器就可以看到相应的内容，不用等待服务器响应结束。
+	
+2. 实现异步的处理
+	* 得到AsyncContext，它异步上下文对象
+		AsyncContext ac = request.startAsync(request, response);
+	* 给上下文一个Runnable对象，启动它。(给上下文一个任务，让它完成。)
+		ac.start(new Runnable(){
+			public void run(){
+				......
+			}
+		})
+	* 必须加上"asyncSupported = true"属性才能支持异步处理，即@WebServlet(urlPatterns = "/BServlet", asyncSupported = true)
+	

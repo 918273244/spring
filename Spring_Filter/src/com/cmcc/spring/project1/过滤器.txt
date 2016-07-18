@@ -1,0 +1,51 @@
+JavaWeb三大组件(Servlet、Listener、Filter)
+
+1、共同点：都需要在web.xml中进行配置。
+	特例：有两个感知监听器不需要配置
+	
+2、过滤器Filter
+	2.1 它会在一组资源(jsp、servlet、.css、.html等)的前面执行
+	2.2 它可以让请求得到目标资源，也可以不让请求达到
+	2.3 过滤器有拦截请求的能力
+	
+3、使用
+	权限控制，如登陆
+	
+4、过滤器的编写
+	4.1 写一个类实现Filter接口
+	4.2 在web.xml中进行配置
+	4.3 两个参数解释：
+		4.3.1 FilterConfig:与ServletConfig相似(具体作用参见j2eeAPI)
+			* 获取初始化参数：getInitParameter()
+			* 获取过滤器名称：getFilterName()
+			* 获取application：getServletContext()
+		4.3.2 FilterChain
+			* doFilter(ServletRequest, ServletResponse):放行。放行，就相当于调用了目标Servlet的service()方法			
+			注意：Filter和FIlterChain中都有doFilter()方法，这两个方法的区别是，前者有3个参数，后者只有2个参数；后者是放行的意思。
+	
+    void init(FilterConfig)
+    	* 创建之后马上执行，用来做初始化
+	public void doFilter(ServletRequest, ServletResponse, FilterChain)
+		* 每次过滤时都会执行
+	public void destroy()
+		* 销毁前执行，用来做对非内存资源进行释放
+		
+	web.xml中的配置
+	<filter>
+    	<filter-name>AFilter</filter-name>
+    	<filter-class>com.cmcc.spring.filter.AFilter</filter-class>
+  	</filter>
+  	<filter-mapping>
+    	<filter-name>AFilter</filter-name>
+    	<url-pattern>/AFilter</url-pattern>
+  	</filter-mapping>
+  	
+5、Filter是单例的、
+
+6、过滤器的四种拦截方式(配置在web.xml的filter-mapping标签中)
+	<dispatcher>REQUEST</dispatcher> 	默认的。拦截任何请求
+	<dispatcher>FORWARD</dispatcher> 	拦截转发
+	<dispatcher>INCLUDE</dispatcher> 	拦截包含
+	<dispatcher>ERROR</dispatcher> 		拦截错误
+	
+7、多Filter时，Filter的执行顺序由Filter在web.xml中的配置顺序决定

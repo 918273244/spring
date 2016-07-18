@@ -1,0 +1,8 @@
+1、HttpSessionListener的作用：通常用于粗略的统计网站的在线人数(用户登录网址就会产生session，所以统计session个数即可，但是session默认是30分钟后才自动注销，因此统计的并不准确)
+	1.1 同一个浏览器窗口访问不会产生新的session(包括在新的标签页中访问该网站、点击超链接访问该网站)
+	1.2 不同的浏览器窗口访问资源时会产生新的session
+	1.3 servlet新建session的两种方法：
+		1.3.1 当servlet中有getSession()的操作，即获取session的操作时，会新建session
+		1.3.2 客户端访问jsp页面时，servlet会将jsp页面进行翻译，从而生成新的session
+	
+2、ServletRequestListener的作用：通常用于统计网站的点击量(Listener每监听到客户端访问一次sevlet就计数一次)

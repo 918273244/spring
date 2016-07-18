@@ -1,0 +1,37 @@
+Servlet3.0对上传文件的支持
+
+1、上传
+	==========原来的做法=========
+	* 上传对表单的要求：
+		> method="post"
+		> enctype="multipart/form-data"，它的默认值是："application/x-www-form-urlencoded"
+		> <input type="file" name="必须给"/>
+	* 上传Servlet的使用
+		> request.getParameter()不能再使用
+		> request.getInputStream()使用它类获取这个表单的数据
+	
+	==========改进的做法=========
+	* commons-fileupload
+		> 创建工厂 
+		> 解析器
+		> 使用解析器来解析request对象，得到List<FileItem>
+
+	==========Servlet3.0的做法=========
+	Servlet3.0对上传提供了支持：
+	* 表单不变
+	* 在Servlet中不需要在使用commons-fileupload，而是使用Servlet3.0提供的上传组件接口
+	
+	上传的步骤：
+	* 使用request.getPart("字段名")，得到Part实例
+	* Part：
+		> String getContentType()：获取上传文件的MIME类型
+		> String getName()：获取表单项的名称。注意，不是文件名称，Part接口没有提供获取文件名称的方法
+		> String getHeader(String header)：获取指定头的值
+		> long getSize()：获取上传文件的大小
+		> InputStream getInputStream()：获取上传文件的内容
+		> void write(String fileName)：把上传文件保存的指定路径下
+	* 默认Servlet是不支持使用上传组件的，需要给Servlet添加一个注解@MultipartConfig
+	
+	总结:
+		> Servlet3.0增加了对getParameter()方法的支持，从而可以轻易获取普通属性
+		> Servlet3.0针对文件上传，可以通过request.getPart(name)方法来将文件流转换到Part对象中，从而所有对文件的操作都只需要对part对象进行操作就行了

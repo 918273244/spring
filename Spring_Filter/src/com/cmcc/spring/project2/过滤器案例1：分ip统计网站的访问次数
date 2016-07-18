@@ -1,0 +1,15 @@
+需求分析
+
+1、统计工作需要在所有资源之前执行，那么就可以放到Filter中了。
+
+2、我们这个过滤器不打算做拦截操作，因为我们只是用来做统计的。
+
+3、用什么东西来装在统计的数据？Map<String, Integer>。且整个网站只需要一个Map即可
+
+4、Map什么时候创建？Map保存到哪里？
+	4.1 使用ServletContextListener，在服务器启动时完成创建
+	4.2 Map保存到到ServletContext中。注意：向ServletContext中存储数据，从前端可以直接通过存储的key值来获取数据
+	
+5、Map的使用
+	5.1 需要在Filter中用来保存数据
+	5.2 需要在页面使用，打印Map中的数据

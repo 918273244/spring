@@ -1,0 +1,80 @@
+泛型：
+
+1、泛型类：
+	* 定义：具有一个或多个类型 变量 的类，称之为泛型类
+	* 标志：一定要在泛型类名后用尖括号<>将类型变量名括起来
+	* 例：class A<T> {}
+	
+2、在创建泛型类实例时，需要为其类型变量赋值
+	* 例：A<String> a = new A<String>();
+	* 如果创建实例时，不给类型变量赋值，那么会有一个警告
+	
+3、泛型方法：
+	* 具有一个或多个类型变量的方法，称之为泛型方法
+	* 标志：方法的返回值类型名前会有尖括号<>将类型变量名括起来
+	* 例：public <T> T fun(T t) {}
+	* 注意：class A<T> {
+				public T fun(T t){}	//——>fun不是泛型方法，因为该方法上没有尖括号括起来的变量名。它只是泛型类中的一个方法
+			}
+	* 泛型类与泛型方法没有任何关系。泛型方法不一定非要在泛型类中。
+	
+4、泛型在类中或方法中的使用
+	* 泛型类中使用泛型：
+		> 成员变量的类型
+		> 返回值和参数类型
+		> 局部变量的引用上。即new对象时，只能放在等号的左边，不能放在右边
+	* 例：class A<T> {
+			private T bean;			//泛型可在成员变量上使用
+			public T fun1(T t) {}	//泛型可以在类中的方法上使用(返回值和参数类型)
+			
+			public void fun2(){		//泛型用在局部变量的引用类型上
+				T b = ...	//可以
+				new T();	//不行
+			}
+			
+5、泛型的继承和实现
+	* 子类不是泛型类：需要给父类传递类型常量
+	* 子类是泛型类：可以给父类传递类型常量，也可以传递类型变量
+	* 例：class A<T> {}
+		 
+		 class AA1 extends A<String> {}		//子类AA1不是泛型类
+		 
+		 class AA2<E> extends A<E> {}		//子类AA2是泛型类。具体在创建泛型类实例时再为类型变量赋值		
+	
+		}
+		
+====================================================================
+
+6、通配符
+	* 标志：？
+	* 产生的背景：泛型在使用的时候，引用和创建的两端，给出的泛型类型常量必须相同，
+				即List<String> list = new ArrayList<String>();中等号左右尖括号中必须都写成String，而不能写成类似
+				List<Object> list = new ArrayList<String>();这种格式。
+				但是又有后者这种写法的需求，那么就诞生了通配符的概念。
+	* 注意：数组Obejct[] objs = new String[10];这样写是可以的
+		      通配符的写法 List<? extends Object> list = new ArrayList<String>();
+
+	* 通配符的使用场景：方法的形参
+	* 通配符的优点：使方法更加通用
+	* 通配符的分类：
+		> 无界通配：？ 
+		> 子类限定：？ extends Object
+		> 父类限定：？ super Integer
+	* 通配符的缺点：使变量使用上不再方便
+		> 无界通配：参数和返回值为泛型的方法，不能使用
+		> 子类限定：参数为泛型的方法不能使用
+		> 父类限定：返回值为泛型的方法不能使用
+	* 通配符实战
+		boolean List<E>.addAll(Collection<E> c)
+		
+		List<Number> nums = new ArrayList<Number>();
+		List<Integer> ints = new ArrayList<Integer>();
+		nums.addAll(ints);	
+		//不能这样写，会报错。因为上面等价于addAll(Collection<Number> c)，此时传递List<Integer>就不行。
+		//若改成boolean List<E>.addAll(Collection<? extends E> c)就可以，因为Integer是Number的子类
+		
+		
+				
+	
+	
+	

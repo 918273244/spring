@@ -1,0 +1,8 @@
+1、无论是get请求还是post请求，都需要设定response.setContentType("text/html;charset=utf-8");
+	来设定中文字符传递到浏览器的编码格式是utf-8
+
+2、对于post请求：通过request.setCharacterEncoding("utf-8");来解决乱码问题
+
+3、对于get请求：(由于没有request.setParameter()这个方法，所以没法直接将修改后的数据存储到request的parameter属性中)
+	所以自定义一个HttpServletRequestWarper的子类，实现构造方法和getParameter()两个方法
+	在getParameter()方法中，修改getParameter()的返回值的编码方式为utf-8，即通过new String(value.getBytes("iso-8859-1"), "utf-8");来实现

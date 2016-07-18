@@ -1,0 +1,10 @@
+反射泛型信息
+
+1、
+Class --> Type getGenericSupperclass()
+Type --> ParameterizedType，把Type强转成ParameterizedType类型
+ParameterizedType --> 参数化类型 ，即类似"A<String>"整体
+ParameterizedType：Type[] getActualTypeArguments()，获取"A<String>"中的"String"
+Type[]就是Class[]，我们就得到了子类的类型
+
+2、
